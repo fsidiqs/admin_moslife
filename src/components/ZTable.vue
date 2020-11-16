@@ -66,7 +66,7 @@
         </div>
       </div>
       <div>
-        <div class="border border-gray-400 rounded-md flex">
+        <div class="border border-gray-500 rounded-md flex">
           <div class="relative">
             <button
               @click="open = !open"
@@ -146,7 +146,7 @@
         <thead>
           <tr class="text-left">
             <th
-              class="py-2 px-3 sticky top-0 border-b border-gray-200 bg-white"
+              class="py-2 px-3 sticky top-0 border-b border-gray-300 bg-white"
             >
               <label
                 class="text-blue-600 inline-flex justify-between items-center hover:bg-gray-200 px-2 py-2 rounded-lg cursor-pointer"
@@ -161,7 +161,7 @@
             <th
               v-for="(column, i) in columns"
               :key="i"
-              class="bg-white sticky top-0 border-b border-gray-200 px-3 py-2 text-gray-800 font-bold tracking-wider uppercase text-xs text-left"
+              class="bg-white sticky top-0 border-b border-gray-300 px-3 py-2 text-gray-800 font-bold tracking-wider uppercase text-xs text-left"
               :ref="column.field"
               :class="{ [column.field]: true }"
             >
@@ -212,7 +212,7 @@
 
       <!-- Pagination -->
       <div
-        class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+        class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-300 sm:px-6"
       >
         <div class="flex-1 flex justify-between sm:hidden">
           <a
@@ -236,9 +236,10 @@
               Showing
               <span class="font-medium">1</span>
               to
-              <span class="font-medium">10</span>
+              <span class="font-medium" v-if="metadata.total >= 10">10</span>
+              <span class="font-medium" v-else>{{ metadata.total }}</span>
               of
-              <span class="font-medium">97</span>
+              <span class="font-medium">{{ metadata.total }}</span>
               results
             </p>
           </div>
@@ -278,6 +279,7 @@ export default {
       type: Array,
       required: true,
     },
+    metadata: { default: () => [], type: [Array, Function] },
 
     //title: String,
   },

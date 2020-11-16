@@ -9,19 +9,19 @@
                 <div>
                     <button class="text-sm px-4 py-2 focus:outline-none">Export</button>
                     <button class="text-sm px-4 py-2 focus:outline-none mr-5">Import</button>
-                    <button class="relative inline-flex items-center px-4 py-2 text-sm leading-5 font-medium rounded-md text-white bg-green-700 hover:bg-green-600 hover:text-gray-100 focus:outline-none focus:shadow-outline-green focus:border-green-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                    <button @click="$router.push('/product/add')" class="relative inline-flex items-center px-4 py-2 text-sm leading-5 font-medium rounded-md text-white bg-green-700 hover:bg-green-600 hover:text-gray-100 focus:outline-none focus:shadow-outline-green focus:border-green-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
                         Tambah Produk
                     </button>
                 </div>
             </div>
             <ZTable
-                :data="paginatedData.elements"
+                :data="info"
                 :columns="columns"
                 :PageNavHandler="pageNavHandler"
                 :TableInputSearchHandler="tableInputSearchHandler"
-                title="Products"
+                title="Tutorials"
             >
-                <template slot="product_images" slot-scope="props">
+                <!-- <template slot="product_images" slot-scope="props">
                     <div v-for="(image, i) in props.item.product_images" :key="i">
                         <div v-if="i === 0">
                             <img :src="image.product_image.url" width="100" />
@@ -49,7 +49,7 @@
                 </template>
                 <template slot="category" slot-scope="props">
                     {{ props.item.category.name }}
-                </template>
+                </template> -->
                 <!-- <template slot="name" slot-scope="props">
                     <input
                         type="button"
@@ -62,11 +62,12 @@
                 </template> -->
             </ZTable>
         </div>
-        <!-- {{ paginatedData }} -->
+        <!-- {{ paginatedData.metadata }} -->
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 import ZNavigation from '@/components/ZNavigation'
 import ZTable from '@/components/ZTable'
 import { AuthApiGet } from '@/utils/httpRequests'
@@ -77,41 +78,73 @@ export default {
         return {
             paginatedData: {},
             //table
+            // columns: [
+            //     // {
+            //     //     id: 1,
+            //     //     field: 'ID',
+            //     //     label: 'ID',
+            //     //     visibility: true,
+            //     // },
+            //     {
+            //         id: 2,
+            //         field: 'product_images',
+            //         label: 'Gambar',
+            //         visibility: true,
+            //     },
+            //     {
+            //         id: 3,
+            //         field: 'name',
+            //         label: 'Nama Produk',
+            //         visibility: true,
+            //     },
+            //     {
+            //         id: 4,
+            //         field: 'brand',
+            //         label: 'Brand',
+            //         visibility: true,
+            //     },
+            //     {
+            //         id: 5,
+            //         field: 'category',
+            //         label: 'Kategori',
+            //         visibility: true,
+            //     },
+            //     {
+            //         id: 6,
+            //         field: 'ID',
+            //         label: 'Aksi',
+            //         visibility: true,
+            //     },
+            // ],
             columns: [
                 // {
                 //     id: 1,
-                //     field: 'ID',
+                //     field: 'id',
                 //     label: 'ID',
                 //     visibility: true,
                 // },
                 {
                     id: 2,
-                    field: 'product_images',
-                    label: 'Gambar',
+                    field: 'title',
+                    label: 'Judul',
                     visibility: true,
                 },
                 {
                     id: 3,
-                    field: 'name',
-                    label: 'Nama Produk',
+                    field: 'description',
+                    label: 'Deskripsi',
                     visibility: true,
                 },
                 {
                     id: 4,
-                    field: 'brand',
-                    label: 'Brand',
+                    field: 'published',
+                    label: 'Status',
                     visibility: true,
                 },
                 {
                     id: 5,
-                    field: 'category',
-                    label: 'Kategori',
-                    visibility: true,
-                },
-                {
-                    id: 6,
-                    field: 'ID',
-                    label: 'Aksi',
+                    field: 'createdAt',
+                    label: 'Tanggal Dibuat',
                     visibility: true,
                 },
             ],
@@ -120,10 +153,14 @@ export default {
             perPage: 10,
             page: 1,
             //end table
+            info: null
         }
     },
     created () {
-        this.getResellers(this.page, this.perPage)
+        //this.getResellers(this.page, this.perPage)
+        axios
+            .get('http://localhost:4000/api/tutorials')
+            .then(response => (this.info = response.data))
     },
     methods: {
         async getResellers(p_page, p_limit) {

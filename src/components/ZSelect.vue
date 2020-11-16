@@ -2,9 +2,16 @@
   <div class="relative">
     <select :value="value" class="block appearance-none rounded-md w-full text-sm bg-white border-2 border-gray-400 text-gray-700 py-2 px-4 pr-8 rounded focus:outline-none focus:bg-white focus:border-gray-500" @change="input($event)">
       <option v-show="placeholder !== null" value="" disabled>{{ placeholder }}</option>
-      <option v-for="(option, i) in data" :value="option" :key="i">
-        {{ option }}
-      </option>
+      <template v-if="data[0].label === undefined">
+        <option v-for="(option, i) in data" :value="option" :key="i">
+          {{ option }}
+        </option>
+      </template>
+      <template v-else>
+        <option v-for="(option, i) in data" :value="option.value" :key="i">
+          {{ option.label }}
+        </option>
+      </template>
     </select>
     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
       <svg class="h-5 w-5 text-gray-700" viewBox="0 0 20 20" fill="none" stroke="currentColor">
