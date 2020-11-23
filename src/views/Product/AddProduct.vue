@@ -8,7 +8,6 @@
                         <div class="w-full p-4">
                             <!-- <button @click="generatePost" class="px-4 py-2 bg-blue-600 text-white focus:outline-none hover:bg-blue-700 rounded text-sm">Generate Data</button>
                             <br/><br/> -->
-                            {{ generatePostData }}
                         </div>
                         <!-- Main -->
                         <div class="p-4 md:w-2/3 w-full h-auto">
@@ -69,7 +68,7 @@
                                 <div class="w-full">
                                     <h4 class="text-md text-gray-900 font-semibold pt-2 pb-5 -mt-1 mb-1">Pengaturan Harga</h4>
                                     <h4 class="text-sm text-gray-900 -mt-1 mb-1">Harga Produk</h4>
-                                    <input v-model="single_product_detail.harga_jual" class="bg-white text-sm rounded border-2 border-gray-400 focus:outline-none focus:border-orange-500 px-3 py-2 w-full" placeholder="Rp0.00" type="text">
+                                    <input v-model.number="single_product_detail.harga_jual" class="bg-white text-sm rounded border-2 border-gray-400 focus:outline-none focus:border-orange-500 px-3 py-2 w-full" placeholder="Rp0.00" type="text">
                                 </div>
                             </div>
                             <!-- Informasi Stok -->
@@ -93,7 +92,7 @@
                                 <div class="w-full">
                                     <h4 class="text-md text-gray-900 font-semibold pt-2 pb-5 -mt-1 mb-1">Pengiriman</h4>
                                     <h4 class="text-sm text-gray-900 -mt-1 mb-1">Berat (Per gram)</h4>
-                                    <input v-model="single_product_detail.weight" class="bg-white text-sm rounded border-2 border-gray-400 focus:outline-none focus:border-orange-500 px-3 py-2 w-full" placeholder="Contoh: 1000" type="text">
+                                    <input v-model.number="single_product_detail.weight" class="bg-white text-sm rounded border-2 border-gray-400 focus:outline-none focus:border-orange-500 px-3 py-2 w-full" placeholder="Contoh: 1000" type="text">
                                 </div>
                             </div>
                             <!-- Informasi Variant -->
@@ -149,7 +148,7 @@
                                     <h4 class="text-md text-gray-900 font-semibold pt-2 pb-5 -mt-1 mb-1">Status Produk</h4>
                                     <z-select class="mb-5" v-model="status" :data="['Draf', 'Aktif']">
                                     </z-select>
-                                    <button @click="generatePost" class="text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-sm w-full">Simpan Produk</button>
+                                    <button @click="createProduct" class="text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-sm w-full">Simpan Produk</button>
                                 </div>
                             </div>
                             <div class="bg-white px-5 py-5 rounded-t-lg shadow border-b border-gray-200">
@@ -197,15 +196,15 @@ export default {
             //weight: '', ---
             product_images: [],
             single_product_detail: {
-                weight: '',
-                harga_jual: ''
+                weight: null,
+                harga_jual: null
             },
 
             // Product Setting
             status: 'Draf',
-            product_type: '',
-            brand: '',
-            category: '',
+            product_type: null,
+            brand: null,
+            category: null,
 
             // Product Variant
             variantToogle: false,
@@ -385,16 +384,28 @@ export default {
 
             let data = new FormData()
 
-            data.set('name', this.product_name)
-            data.set('description', this.desc)
-            data.set('sku', this.sku)
-            data.set('brand_id', this.brand)
-            data.set('category_id', this.category)
-            data.set('product_type_id', this.product_type)
-            data.set('product_kind_id', this.product_kind)
-            data.set('product_images', this.product_images)
-            data.set('status', this.status)
-            data.set('single_product_detail', this.single_product_detail)
+            // data.set('name', this.product_name)
+            // data.set('description', this.desc)
+            // data.set('sku', this.sku)
+            // data.set('brand_id', this.brand)
+            // data.set('category_id', this.category)
+            // data.set('product_type_id', this.product_type)
+            // data.set('product_kind_id', this.product_kind)
+            // data.set('product_images', this.product_images)
+            // data.set('status', this.status)
+            // data.set('single_product_detail', this.single_product_detail)
+            const singleProduct = {
+                brand_id: parseInt(this.brand),
+                category_id: parseInt(this.category),
+                product_type_id: parseInt(this.product_type),
+                product_kind_id: parseInt(this.product_kind),
+                name: this.product_name,
+                description: this.desc,
+                sku: this.sku,
+                single_product_detail: JSON.stringify(this.single_product_detail)
+            }
+            data.append('product_images', this.product_images)
+            data.append('product', JSON.stringify(singleProduct))
 
             try {
                 res = await AuthApiPost('/products/create-product-basic-structure', data);
