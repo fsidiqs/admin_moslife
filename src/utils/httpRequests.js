@@ -30,6 +30,20 @@ const AuthApiPost = async (url, data) => {
     })
 };
 
+const ApiPostMultipartFormData = async (url, data) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'post',
+            url: `${API}${url}`,
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${store.state.accessToken}`
+            },
+            data
+        }).then(res => resolve(res)).catch(err => reject(err))
+    })
+}
+
 const AuthApiPut = async (url, data) => {
     return new Promise((resolve, reject) => {
         axios({
@@ -69,9 +83,13 @@ const ApiPost = async (url, data) => {
         }).then(res => resolve(res)).catch(err => reject(err))
     })
 }
+
+
+
 export {
     AuthApiGet,
     AuthApiPost,
+    ApiPostMultipartFormData,
     AuthApiPut,
     AuthApiDelete,
     ApiPost,
