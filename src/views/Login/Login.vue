@@ -9,6 +9,7 @@
       v-model="password"
     />
     <input type="button" value="Login" @click="loginHandler" />
+
   </div>
 </template>
 
@@ -21,6 +22,7 @@ export default {
     return {
       email: 'test@test.com',
       password: '1234',
+      birthdate: null, 
     };
   },
   computed: {},
