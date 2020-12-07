@@ -476,7 +476,7 @@
 import ZNavigation from '@/components/ZNavigation';
 import ZSelect from '@/components/ZSelect';
 import { VueEditor } from 'vue2-editor';
-import { AuthApiGet, ApiPostMultipartFormData } from '@/utils/httpRequests';
+import { AuthApiGet, AuthApiPostMultipartFormData } from '@/utils/httpRequests';
 
 export default {
   components: { ZNavigation, ZSelect, VueEditor },
@@ -606,7 +606,7 @@ export default {
         sku: this.sku,
         barcode: this.barcode,
         product_images: this.product_images,
-        single_product_detail: this.single_product_detail,
+        retail: this.single_product_detail.harga_jual,
 
         status: this.status,
         product_type: this.product_type,
@@ -678,35 +678,80 @@ export default {
 
       let data = new FormData();
 
-      // data.set('name', this.product_name)
-      // data.set('description', this.desc)
-      // data.set('sku', this.sku)
-      // data.set('brand_id', this.brand)
-      // data.set('category_id', this.category)
-      // data.set('product_type_id', this.product_type)
-      // data.set('product_kind_id', this.product_kind)
-      // data.set('product_images', this.product_images)
-      // data.set('status', this.status)
-      // data.set('single_product_detail', this.single_product_detail)
-      const singleProduct = JSON.stringify({
+      // const singleProduct = JSON.stringify({
+      //   brand_id: parseInt(this.brand),
+      //   category_id: parseInt(this.category),
+      //   product_type_id: parseInt(this.product_type),
+      //   product_kind_id: this.variantToogle == false ? 1 : 2,
+      //   name: this.product_name,
+      //   description: this.desc,
+      //   sku: this.sku,
+      //   retail_price: parseFloat(this.single_product_detail.harga_jual),
+      // });
+      // const products = [
+      //   JSON.stringify({
+      //     brand_id: parseInt(this.brand),
+      //     category_id: parseInt(this.category),
+      //     product_type_id: parseInt(this.product_type),
+      //     product_kind_id: this.variantToogle == false ? 1 : 2,
+      //     name: this.product_name,
+      //     description: this.desc,
+      //     sku: this.sku,
+      //     retail_price: parseFloat(this.single_product_detail.harga_jual),
+      //   }),
+      //   JSON.stringify({
+      //     brand_id: parseInt(this.brand),
+      //     category_id: parseInt(this.category),
+      //     product_type_id: parseInt(this.product_type),
+      //     product_kind_id: this.variantToogle == false ? 1 : 2,
+      //     name: this.product_name,
+      //     description: this.desc,
+      //     sku: this.sku,
+      //     retail_price: parseFloat(this.single_product_detail.harga_jual),
+      //   }),
+      // ];
+
+      const items = [
+        {
+          sku: "skuvariant1",
+          retail_price: parseFloat(this.single_product_detail.harga_jual),
+          weight: Number(this.single_product_detail.weight),
+          options: JSON.stringify([{ name: 'merah' }, { name: 'xl' }]),
+        },
+        {
+          sku: "skuvariant2",
+          retail_price: parseFloat(this.single_product_detail.harga_jual),
+          weight: Number(this.single_product_detail.weight),
+          options: JSON.stringify([{ name: 'biru' }, { name: 'm' }]),
+        },
+      ];
+      const variants = JSON.stringify([
+        {
+          name: 'color',
+        },
+        {
+          name: 'size',
+        },
+      ]);
+      const productPost = JSON.stringify({
         brand_id: parseInt(this.brand),
         category_id: parseInt(this.category),
         product_type_id: parseInt(this.product_type),
-        product_kind_id: this.variantToogle == false ? 1 : 2,
+        product_kind_id: 2,
         name: this.product_name,
         description: this.desc,
-        sku: this.sku,
-        // single_product_detail: JSON.stringify(this.single_product_detail),
-        variant_product_detail: JSON.stringify(this.variant_product_detail)
+        items: JSON.stringify(items),
+        variants,
       });
+
       this.product_images.forEach((file) => {
         data.append('product_images', file, file.name);
       });
 
-      data.append('product', singleProduct);
+      data.append('product', productPost);
 
       try {
-        res = await ApiPostMultipartFormData(
+        res = await AuthApiPostMultipartFormData(
           '/products/create-product-basic-structure',
           data
         );

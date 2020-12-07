@@ -30,7 +30,7 @@ const AuthApiPost = async (url, data) => {
     })
 };
 
-const ApiPostMultipartFormData = async (url, data) => {
+const AuthApiPostMultipartFormData = async (url, data) => {
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',
@@ -57,6 +57,36 @@ const AuthApiPut = async (url, data) => {
             .catch(err => reject(err))
     })
 }
+
+const AuthApiPutMultipartFormData = async (url, data) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: "put",
+            url: `${API}${url}`,
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${store.state.accessToken}`
+            },
+            data
+        }).then(res => resolve(res))
+            .catch(err => reject(err))
+    })
+}
+
+const AuthApiGetBlob = async (url, params) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: "get",
+            url: `${API}${url}`,
+            headers: {
+                Authorization: `Bearer ${store.state.accessToken}`
+            },
+            responseType: "blob",
+            params
+        }).then(response => resolve(response))
+            .catch(err => reject(err))
+    })
+};
 
 const AuthApiDelete = async (url, params) => {
     return new Promise((resolve, reject) => {
@@ -89,8 +119,10 @@ const ApiPost = async (url, data) => {
 export {
     AuthApiGet,
     AuthApiPost,
-    ApiPostMultipartFormData,
+    AuthApiPostMultipartFormData,
+    AuthApiGetBlob,
     AuthApiPut,
+    AuthApiPutMultipartFormData,
     AuthApiDelete,
     ApiPost,
 }

@@ -11,6 +11,8 @@ import LoginPage from '../views/Login/Login.vue'
 import ListProduct from '../views/Product/ListProduct.vue'
 import AddProduct from '../views/Product/AddProduct.vue'
 import EditProduct from '../views/Product/EditProduct.vue'
+import InventoryPage from '../views/Product/Inventory/Inventory.vue'
+
 // End Product
 // *
 
@@ -76,12 +78,23 @@ const routes = [
 			//type: 'children'
 		}
 	},
+
 	{
-		path: '/product/edit',
+		path: '/product/:product_id/edit',
 		name: 'Edit Product',
 		component: EditProduct,
 		meta: {
 			group: 'product',
+			//type: 'children'
+		}
+	},
+	{
+		path: '/product/inventory',
+		name: 'Inventory',
+		component: InventoryPage,
+		meta: {
+			group: 'product',
+			type: 'add',
 			//type: 'children'
 		}
 	},
