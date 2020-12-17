@@ -710,38 +710,60 @@ export default {
       //     retail_price: parseFloat(this.single_product_detail.harga_jual),
       //   }),
       // ];
+      // singleProduct inventory
+      const inventories = [
+        {
+          subdistrict_id: 1,
+        },
+        {
+          subdistrict_id: 2,
+        },
+      ];
 
       const items = [
         {
-          sku: "skuvariant1",
+          sku: 'singleProduct',
           retail_price: parseFloat(this.single_product_detail.harga_jual),
           weight: Number(this.single_product_detail.weight),
-          options: JSON.stringify([{ name: 'merah' }, { name: 'xl' }]),
-        },
-        {
-          sku: "skuvariant2",
-          retail_price: parseFloat(this.single_product_detail.harga_jual),
-          weight: Number(this.single_product_detail.weight),
-          options: JSON.stringify([{ name: 'biru' }, { name: 'm' }]),
+          inventories: JSON.stringify(inventories),
         },
       ];
-      const variants = JSON.stringify([
-        {
-          name: 'color',
-        },
-        {
-          name: 'size',
-        },
-      ]);
+      // variant product
+      // const items = [
+      //   {
+      //     sku: "skuvariant1",
+      //     retail_price: parseFloat(this.single_product_detail.harga_jual),
+      //     weight: Number(this.single_product_detail.weight),
+      //     options: JSON.stringify([{ name: 'merah' }, { name: 'xl' }]),
+      //   },
+      //   {
+      //     sku: "skuvariant2",
+      //     retail_price: parseFloat(this.single_product_detail.harga_jual),
+      //     weight: Number(this.single_product_detail.weight),
+      //     options: JSON.stringify([{ name: 'biru' }, { name: 'm' }]),
+      //   },
+      // ];
+
+      // const variants = JSON.stringify([
+      //   {
+      //     name: 'color',
+      //   },
+      //   {
+      //     name: 'size',
+      //   },
+      // ]);
+      
+      // variant product
+
       const productPost = JSON.stringify({
         brand_id: parseInt(this.brand),
         category_id: parseInt(this.category),
         product_type_id: parseInt(this.product_type),
-        product_kind_id: 2,
+        product_kind_id: 1,
         name: this.product_name,
         description: this.desc,
         items: JSON.stringify(items),
-        variants,
+        // variants,
       });
 
       this.product_images.forEach((file) => {
