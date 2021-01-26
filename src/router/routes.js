@@ -12,7 +12,7 @@ import ListProduct from '../views/Product/ListProduct.vue'
 import AddProduct from '../views/Product/AddProduct.vue'
 import EditProduct from '../views/Product/EditProduct.vue'
 import InventoryPage from '../views/Product/Inventory/Inventory.vue'
-
+import ProductPrice from '../views/Product/ProductPrice.vue'
 // End Product
 // *
 
@@ -63,6 +63,15 @@ const routes = [
 		path: '/product/list',
 		name: 'All Products',
 		component: ListProduct,
+		meta: {
+			group: 'product',
+			type: 'children'
+		}
+	},
+	{
+		path: '/product/export-prices',
+		name: "Import/Export Product Prices",
+		component: ProductPrice,
 		meta: {
 			group: 'product',
 			type: 'children'
